@@ -27,7 +27,11 @@ const router = createRouter({
       name: 'favourites',
       component: Favourites
     },
-   
+   {
+    path: '/',
+    redirect: true,
+    redirectPath: '/trending'
+   }
   ]
 })
 

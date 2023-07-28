@@ -75,7 +75,7 @@ body {
 
 <template>
   <Sidebar />
-  <h1 style="text-align: center; margin-top: 2%;">Your Saved Stocks</h1>
+  <h2 style="text-align: center; margin-top: 2%;">Your Saved Stocks</h2>
   <div class="page-content">
     <div class="row align-items-stretch">
       <div class="col-md-4" v-for="symb in savedStocks" :key="symb">

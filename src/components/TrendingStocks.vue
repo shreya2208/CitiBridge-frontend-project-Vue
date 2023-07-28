@@ -1,14 +1,27 @@
 <template>
   <Sidebar />
-  <h1 style="text-align: center; margin-top: 2%;">Top 5 Stocks Recommendation</h1>
+  <h2 style="text-align: center; margin-top: 2%;">Top 5 Best Performing Stocks </h2>
 
-  <div class="page-content">
-    <div class="row align-items-stretch">
-      <div class="col-md-4" v-for="symb in selectedStocks" :key="symb">
-        <Stock :symbol="symb" :save="true" />
-      </div>
+<div class="page-content">
+  <div class="row align-items-stretch">
+    <div class="col-md-4" v-for="symb in bestPerformingStocks" :key="symb">
+      <!-- Display best performing stocks -->
+      <Stock :symbol="symb" :save="true" />
     </div>
   </div>
+</div>
+
+<h2 style="text-align: center; margin-top: 2%;">Top 5 Worst Performing Stocks</h2>
+
+<div class="page-content">
+  <div class="row align-items-stretch">
+    <div class="col-md-4" v-for="symb in worstPerformingStocks" :key="symb">
+      <!-- Display worst performing stocks -->
+      <Stock :symbol="symb" :save="true" />
+    </div>
+  </div>
+</div>
+
 </template>
 <style scoped>
 body {
@@ -54,6 +67,8 @@ export default {
   data() {
     return {
       selectedStocks: [],
+      bestPerformingStocks: [],
+      worstPerformingStocks: [],
       smallCapStocks: [],
       midCapStocks: [],
       largeCapStocks: [],
@@ -75,9 +90,9 @@ export default {
     async fetchStockData() {
       const options = {
         method: 'GET',
-        url: 'stocks/tr/trending',
+        url: 'https://mboum-finance.p.rapidapi.com/tr/trending',
         headers: {
-          'X-RapidAPI-Key': 'bd8bc20963msh46fa35633b739c0p1296bcjsnd21875602e30',
+          'X-RapidAPI-Key': '2d2775a738msh47fd7ca016f2a9bp1f58bcjsn812adb87664f',
           'X-RapidAPI-Host': 'mboum-finance.p.rapidapi.com',
         },
       };
@@ -95,7 +110,7 @@ let quotes = data2[0].quotes.slice(0, 100).join(',');
             symbol: quotes,
           },
           headers: {
-            'X-RapidAPI-Key': 'bd8bc20963msh46fa35633b739c0p1296bcjsnd21875602e30',
+            'X-RapidAPI-Key': '2d2775a738msh47fd7ca016f2a9bp1f58bcjsn812adb87664f',
             'X-RapidAPI-Host': 'mboum-finance.p.rapidapi.com',
           },
         };
@@ -107,9 +122,13 @@ let quotes = data2[0].quotes.slice(0, 100).join(',');
         if (data && Array.isArray(data)) {
           for (const q of data) {
             const marketCap = q.marketCap;
+            const regularMarketPreviousClose = parseFloat(q.regularMarketPreviousClose);
+            const regularMarketPrice = parseFloat(q.regularMarketPrice);
+            const performance = ((regularMarketPrice - regularMarketPreviousClose) / regularMarketPreviousClose) * 100;
+            q.performance = performance;
             const marketCapCategory = this.marketCapCategory(marketCap);
             q.marketCapCategory = marketCapCategory;
-
+            
             switch (marketCapCategory) {
               case 'small':
                 this.smallCapStocks.push(q);
@@ -131,13 +150,21 @@ let quotes = data2[0].quotes.slice(0, 100).join(',');
           const selectedCap = localStorage.getItem('cap');
           switch (selectedCap) {
             case 'small':
-              this.selectedStocks = this.smallCapStocks.slice(0, 5);
+              this.smallCapStocks.sort((a, b) => b.performance - a.performance);
+              this.bestPerformingStocks = this.smallCapStocks.slice(0, 5);
+              this.worstPerformingStocks = this.smallCapStocks.slice(this.smallCapStocks.length - 5);
               break;
             case 'medium':
-              this.selectedStocks = this.midCapStocks.slice(0, 5);
+              this.midCapStocks.sort((a, b) => b.performance - a.performance);
+              this.bestPerformingStocks = this.midCapStocks.slice(0, 5);
+              this.worstPerformingStocks = this.midCapStocks.slice(this.midCapStocks.length - 5);
+             
               break;
             case 'large':
-              this.selectedStocks = this.largeCapStocks.slice(0, 5);
+            this.largeCapStocks.sort((a, b) => b.performance - a.performance);
+              this.bestPerformingStocks = this.largeCapStocks.slice(0, 5);
+              this.worstPerformingStocks = this.largeCapStocks.slice(this.largeCapStocks.length - 5);
+             
               break;
             default:
               break;

@@ -19,15 +19,28 @@
    
     </div>
   </div>
-  <div v-if="showModal" class="modal-container">
+  <div v-if="showModal" id="myModal" class="modal">
       <div class="modal-backdrop" @click="closeModal"></div>
+      
       <div class="modal-content">
-        <h2>Enter Quantity</h2>
-        <input v-model="quantity" type="number" min="1" />
+        <span class="close" @click="closeModal">&times;</span>
+        <label for="quantity">Select Quantity: </label>
+        <input v-model="quantity" id="quantity" name="quantity" type="number" min="1" step="1" />
         <button @click="post" class="add-button">Add</button>
-        <button @click="closeModal" class="cancel-button">Cancel</button>
+       
       </div>
     </div>
+    <!-- Modal -->
+  <!-- <div id="myModal" v-if="showModal" class="modal">
+    <div class="modal-content">
+      <span class="close" @click="closeModal">&times;</span>
+      <form id="quantityForm">
+        <label for="quantity">Select Quantity: </label>
+        <input type="number" v-model="quantity" id="quantity" name="quantity" min="1" step="1">
+        <button type="button"  @click="post">Save</button>
+      </form>
+    </div>
+  </div> -->
 
 </template>
 
@@ -63,7 +76,7 @@ export default {
   data() {
     return {
       quantity: 0,
-      VUE_APP_RAPIDAPI_KEY : 'bd8bc20963msh46fa35633b739c0p1296bcjsnd21875602e30',
+      VUE_APP_RAPIDAPI_KEY : '980dfe39a2msha7706debc2293f0p1bd058jsn3c84736f3a26',
       loading: false,
       stockData: {},
       showModal: false,
@@ -216,27 +229,6 @@ export default {
   color: #888;
   margin-bottom: 15px;
 }
-.modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 9998;
-}
 
 .modal-content {
   background-color: #fff;
@@ -274,4 +266,73 @@ export default {
 .save-button:hover {
   background-color: #4682b4;
 }
+.modal {
+  display: block;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      max-width: 400px; /* Adjust the maximum width as needed */
+      width: 100%; /* Take the full width of the container */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: #000;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    label {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    
+    input {
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 50%;
+      margin-bottom: 15px;
+    }
+    
+    .add-button{
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .add-button:hover {
+      background-color: #4682B4;
+    }
+  
 </style>

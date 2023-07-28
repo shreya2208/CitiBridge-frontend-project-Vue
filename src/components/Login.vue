@@ -7,7 +7,7 @@
   </div>
   
   <div class="page-content">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <div class="form-container">
     <form  @submit.prevent="onSubmit" >
       <input type="text" id="username" v-model="form.username" placeholder="Enter username" required>
@@ -95,19 +95,19 @@ import axios from 'axios'
     color: #fff;
     text-decoration: none;
     margin: 0 10px;
-    font-size: 23px;
+    font-size: 20px;
   }
   
   .page-content {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 70px;
     padding: 20px;
     border-radius: 10px;
     background-color: #fff;
   }
   
   .page-content h1 {
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 550;
     line-height: 40px;
     margin-bottom: 30px;
@@ -127,8 +127,8 @@ import axios from 'axios'
   
   .submit-button {
     margin-top : 10px;
-    padding: 13px 25px;
-    font-size: 20px;
+    padding: 12px 22px;
+    font-size: 18px;
     border: none;
     border-radius: 5px;
     background-color: #007bff;

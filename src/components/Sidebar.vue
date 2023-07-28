@@ -47,14 +47,14 @@ body {
       color: #fff;
       display: flex;
       justify-content: space-between;
-      padding: 20px;
+      padding: 18px;
     }
     
     .navbar a {
       color: #fff;
       text-decoration: none;
       margin: 0 15px;
-      font-size: 22px;
+      font-size: 18px;
     }
     
 </style>
