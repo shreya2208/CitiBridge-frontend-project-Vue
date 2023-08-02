@@ -88,21 +88,28 @@ export default {
       }
     },
     async fetchStockData() {
+  
       const options = {
         method: 'GET',
         url: 'https://mboum-finance.p.rapidapi.com/tr/trending',
         headers: {
-          'X-RapidAPI-Key': '2d2775a738msh47fd7ca016f2a9bp1f58bcjsn812adb87664f',
+          'X-RapidAPI-Key':'980dfe39a2msha7706debc2293f0p1bd058jsn3c84736f3a26',
           'X-RapidAPI-Host': 'mboum-finance.p.rapidapi.com',
         },
       };
 
       try {
-       
+       let quotes = ''
         // const data2 =await (makeRequestWithRetry(options))[0].quotes.slice(0, 100).join(',');
-const data2 = await makeRequestWithRetry(options)
-console.log(data2[0].quotes)
-let quotes = data2[0].quotes.slice(0, 100).join(',');
+if(!localStorage.getItem('quotes'))        
+{const data2 = await makeRequestWithRetry(options)
+  console.log(data2[0].quotes)
+
+  quotes = data2[0].quotes.slice(0, 100).join(',');
+  localStorage.setItem('quotes', quotes)}
+  else{
+quotes = localStorage.getItem('quotes')
+  }
         const options2 = {
           method: 'GET',
           url: 'https://mboum-finance.p.rapidapi.com/qu/quote',
@@ -110,14 +117,21 @@ let quotes = data2[0].quotes.slice(0, 100).join(',');
             symbol: quotes,
           },
           headers: {
-            'X-RapidAPI-Key': '2d2775a738msh47fd7ca016f2a9bp1f58bcjsn812adb87664f',
+            'X-RapidAPI-Key': '980dfe39a2msha7706debc2293f0p1bd058jsn3c84736f3a26',
             'X-RapidAPI-Host': 'mboum-finance.p.rapidapi.com',
           },
         };
-
-        
-        const data =await makeRequestWithRetry(options2)
+        let datastring = ''
+        let data;
+        if(!localStorage.getItem('data')){
+        data =await makeRequestWithRetry(options2)
         console.log(data);
+        localStorage.setItem('data', JSON.stringify(data))
+        }
+        else{
+          data = JSON.parse(localStorage.getItem('data'))
+        }
+
         // Check if data is valid and iterable
         if (data && Array.isArray(data)) {
           for (const q of data) {

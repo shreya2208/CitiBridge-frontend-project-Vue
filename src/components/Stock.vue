@@ -49,8 +49,11 @@ import StockChart from './StockChart.vue';
 import axios from 'axios';
 
 const maxRetryAttempts = 10;
-const initialRetryDelay = 1000; // 1 second (adjust as needed)
-const maxRetryDelay = 16000; // 16 seconds (adjust as needed)
+function getRandomInt(min, max) {
+  // Math.random() generates a random decimal between 0 (inclusive) and 1 (exclusive)
+  // We multiply it by (max - min + 1) to cover the entire range, and then add the minimum value
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 async function makeRequestWithRetry(options, attempt = 1) {
   try {
@@ -58,9 +61,9 @@ async function makeRequestWithRetry(options, attempt = 1) {
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 429 && attempt <= maxRetryAttempts) {
-      const retryDelay = Math.min(initialRetryDelay * 2, maxRetryDelay);
-      console.log(`Too Many Requests (429) - Retry attempt ${attempt}. Retrying after ${retryDelay} ms...`);
-      await delay(retryDelay);
+      const retryDelay = getRandomInt(1, 90);
+      console.log(`Too Many Requests (429) - Retry attempt ${attempt}. Retrying after ${retryDelay}s...`);
+      await delay(retryDelay*1000);
       return makeRequestWithRetry(options, attempt + 1);
     }
     throw error;
@@ -152,7 +155,7 @@ export default {
         this.closeModal();
     },
 
-    fetchStockData: function() {
+    fetchStockData: async function() {
       console.log('calling fetchStockData');
       const symbol = this.symbol;
       if (this.$store.state.saved.includes(symbol.symbol)) {
@@ -169,7 +172,7 @@ export default {
           diffandsplits: 'false',
         },
         headers: {
-          'X-RapidAPI-Key': this.VUE_APP_RAPIDAPI_KEY,
+          'X-RapidAPI-Key': '2d2775a738msh47fd7ca016f2a9bp1f58bcjsn812adb87664f',
           'X-RapidAPI-Host': 'mboum-finance.p.rapidapi.com',
         },
       };
@@ -182,15 +185,28 @@ export default {
       //   .catch((error) => {
       //     console.log(error.message);
       //   });
-      makeRequestWithRetry(options).then((response) => {
+     
+      if(!localStorage.getItem(q)){
+      await makeRequestWithRetry(options).then((response) => {
     
           this.chartData = response
+          localStorage.setItem(q, JSON.stringify(this.chartData));
         })
         .catch((error) => {
           console.log(error.message);
         });
+      }
+      else{
+        this.chartData = JSON.parse(localStorage.getItem(q));
+      }
     },
+    
   },
+   getRandomInt(min, max) {
+  // Math.random() generates a random decimal between 0 (inclusive) and 1 (exclusive)
+  // We multiply it by (max - min + 1) to cover the entire range, and then add the minimum value
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 };
 </script>
 

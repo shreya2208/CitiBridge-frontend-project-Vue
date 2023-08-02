@@ -13,7 +13,7 @@ const router = createRouter({
       requiresAuth: true
     },
     {
-      path: '/login',
+      pathList: ['/', '/login'],
       name: 'login',
       component: Login
     },
@@ -27,11 +27,7 @@ const router = createRouter({
       name: 'favourites',
       component: Favourites
     },
-   {
-    path: '/',
-    redirect: true,
-    redirectPath: '/trending'
-   }
+  
   ]
 })
 
